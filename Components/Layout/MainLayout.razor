@@ -1,15 +1,19 @@
 ﻿@inherits LayoutComponentBase
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
     <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+        <!----Nav Bar---->
+        <div class="top-row px-4" style="display: flex; justify-content: space-between;">
+            <div class="top-left">
+                <img src="/images/doglogotransparent.png" alt="Logo" style="width: 10%; height:10%; margin-right: 4px;" />
+                GoFetch
+            </div>
+            <div class="top-right ellipse-container">
+                <img src="/images/dogicon.jpg" alt="UserIcon" class="ellipse-image" />
+            </div>
         </div>
 
+        <!---Page Body--->
         <article class="content px-4">
             @Body
         </article>
@@ -21,3 +25,24 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+<style>
+
+    .ellipse-container {
+        width: 35px; 
+        height: 35px; 
+        border-radius: 50%; 
+        overflow: hidden; 
+        position: relative;
+        border: 1px solid black;
+
+    }
+
+    .ellipse-image {
+        width: 100%;
+        height: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+</style>
