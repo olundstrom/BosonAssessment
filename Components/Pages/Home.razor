@@ -1,7 +1,125 @@
 ﻿@page "/"
 
+@using System.Net.Http
+@using System.Text.Json
+@using System.Linq
+
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Showing search results for: "dog"</h1>
 
-Welcome to your new app.
+<!--Place videos in grid format-->
+<div class="videos-grid">
+    @foreach (var video in videos)
+    {
+        <!--Display thumbnail, title, and channel name-->
+        <div class="video-item">
+            <img src="@video.ThumbnailUrl" alt="@video.Title" />
+            <div class="video-details">
+                <h2>@video.Title</h2>
+                <p>@video.ChannelTitle</p>
+            </div>
+        </div>
+    }
+</div>
+
+<!--Create buttons to navigate through pages-->
+<button disabled="@IsFirstPage" @onclick="LoadPreviousPage">Previous</button>
+<button disabled="@IsLastPage" @onclick="LoadNextPage">Next</button>
+
+@code {
+    private List<YouTubeVideo> videos = new List<YouTubeVideo>();
+    private string nextPageToken;
+    private string prevPageToken;
+
+    private bool IsFirstPage => string.IsNullOrEmpty(prevPageToken);
+    private bool IsLastPage => string.IsNullOrEmpty(nextPageToken);
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadVideos();
+    }
+
+    // Load videos using api key and search query
+    private async Task LoadVideos(string pageToken = null)
+    {
+        HttpClient httpClient = new HttpClient();
+        var apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
+        var searchQuery = "dog";
+        var url = $"https://www.googleapis.com/youtube/v3/search?key={apiKey}&q={searchQuery}&part=snippet&type=video&maxResults=10";
+
+        if (!string.IsNullOrEmpty(pageToken))
+        {
+            url += $"&pageToken={pageToken}";
+        }
+
+        var response = await httpClient.GetAsync(url);
+        var content = await response.Content.ReadAsStringAsync();
+        var result = JsonSerializer.Deserialize<YouTubeSearchResponse>(content);
+
+        // Return thumbnail, title, and channel name
+        videos = result.items.Select(item => new YouTubeVideo
+            {
+                Title = item.snippet.title,
+                ThumbnailUrl = item.snippet.thumbnails.@default.url,
+                ChannelTitle = item.snippet.channelTitle
+            }).ToList();
+
+        nextPageToken = result.nextPageToken;
+        prevPageToken = result.prevPageToken;
+    }
+
+    // Load next page of videos
+    private async Task LoadNextPage()
+    {
+        if (!string.IsNullOrEmpty(nextPageToken))
+        {
+            await LoadVideos(nextPageToken);
+        }
+    }
+
+    // Load previous page of videos
+    private async Task LoadPreviousPage()
+    {
+        if (!string.IsNullOrEmpty(prevPageToken))
+        {
+            await LoadVideos(prevPageToken);
+        }
+    }
+
+    public class YouTubeVideo
+    {
+        public string Title { get; set; }
+        public string ThumbnailUrl { get; set; }
+        public string ChannelTitle { get; set; }
+    }
+
+    public class YouTubeSearchResponse
+    {
+        public List<YouTubeVideoItem> items { get; set; }
+        public string nextPageToken { get; set; }
+        public string prevPageToken { get; set; }
+    }
+
+    public class YouTubeVideoItem
+    {
+        public YouTubeVideoSnippet snippet { get; set; }
+    }
+
+    public class YouTubeVideoSnippet
+    {
+        public string title { get; set; }
+        public string channelTitle { get; set; }
+        public YouTubeThumbnail thumbnails { get; set; }
+    }
+
+    public class YouTubeThumbnail
+    {
+        public YouTubeThumbnailDetails @default { get; set; }
+    }
+
+    public class YouTubeThumbnailDetails
+    {
+        public string url { get; set; }
+    }
+}
