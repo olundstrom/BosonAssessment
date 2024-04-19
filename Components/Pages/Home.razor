@@ -10,7 +10,7 @@
 
 <!--Place videos in grid format-->
 <div class="videos-grid">
-    @foreach (var video in videos)
+    @foreach (var video in CurrentPageVideos)
     {
         <!--Display thumbnail, title, and channel name-->
         <div class="video-item">
@@ -29,8 +29,11 @@
 
 @code {
     private List<YouTubeVideo> videos = new List<YouTubeVideo>();
+    private List<YouTubeVideo> CurrentPageVideos = new List<YouTubeVideo>();
     private string nextPageToken;
     private string prevPageToken;
+    private int maxResultsPerPage = 10;
+    private int currentPageIndex = 0;
 
     private bool IsFirstPage => string.IsNullOrEmpty(prevPageToken);
     private bool IsLastPage => string.IsNullOrEmpty(nextPageToken);
@@ -38,6 +41,7 @@
     protected override async Task OnInitializedAsync()
     {
         await LoadVideos();
+        UpdateCurrentPageVideos();
     }
 
     // Load videos using api key and search query
@@ -46,7 +50,8 @@
         HttpClient httpClient = new HttpClient();
         var apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
         var searchQuery = "dog";
-        var url = $"https://www.googleapis.com/youtube/v3/search?key={apiKey}&q={searchQuery}&part=snippet&type=video&maxResults=10";
+        var maxResults = 100; // Set a large value for maxResults to ensure a significant number of results
+        var url = $"https://www.googleapis.com/youtube/v3/search?key={apiKey}&q={searchQuery}&part=snippet&type=video&maxResults={maxResults}";
 
         if (!string.IsNullOrEmpty(pageToken))
         {
@@ -69,12 +74,21 @@
         prevPageToken = result.prevPageToken;
     }
 
+    // Load current page of videos to display
+    private void UpdateCurrentPageVideos()
+    {
+        CurrentPageVideos = videos.Skip(currentPageIndex * maxResultsPerPage)
+                                  .Take(maxResultsPerPage)
+                                  .ToList();
+    }
+
     // Load next page of videos
     private async Task LoadNextPage()
     {
         if (!string.IsNullOrEmpty(nextPageToken))
         {
-            await LoadVideos(nextPageToken);
+            currentPageIndex++;
+            UpdateCurrentPageVideos();
         }
     }
 
@@ -83,7 +97,8 @@
     {
         if (!string.IsNullOrEmpty(prevPageToken))
         {
-            await LoadVideos(prevPageToken);
+            currentPageIndex--;
+            UpdateCurrentPageVideos();
         }
     }
 
