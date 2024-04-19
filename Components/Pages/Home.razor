@@ -50,8 +50,9 @@
         HttpClient httpClient = new HttpClient();
         var apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
         var searchQuery = "dog";
-        var maxResults = 100; // Set a large value for maxResults to ensure a significant number of results
-        var url = $"https://www.googleapis.com/youtube/v3/search?key={apiKey}&q={searchQuery}&part=snippet&type=video&maxResults={maxResults}";
+        var maxResults = 20; // Set a large value for maxResults to ensure a significant number of results
+        var order = "relevance"; // Set order
+        var url = $"https://www.googleapis.com/youtube/v3/search?key={apiKey}&q={searchQuery}&part=snippet&type=video&maxResults={maxResults}&order={order}";
 
         if (!string.IsNullOrEmpty(pageToken))
         {
@@ -62,13 +63,13 @@
         var content = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<YouTubeSearchResponse>(content);
 
-        // Return thumbnail, title, and channel name
-        videos = result.items.Select(item => new YouTubeVideo
+        // Add newly retrieved videos to the existing list
+        videos.AddRange(result.items.Select(item => new YouTubeVideo
             {
                 Title = item.snippet.title,
                 ThumbnailUrl = item.snippet.thumbnails.@default.url,
                 ChannelTitle = item.snippet.channelTitle
-            }).ToList();
+            }));
 
         nextPageToken = result.nextPageToken;
         prevPageToken = result.prevPageToken;
@@ -88,6 +89,7 @@
         if (!string.IsNullOrEmpty(nextPageToken))
         {
             currentPageIndex++;
+            await LoadVideos(nextPageToken); // Load videos for the next page
             UpdateCurrentPageVideos();
         }
     }
@@ -98,6 +100,7 @@
         if (!string.IsNullOrEmpty(prevPageToken))
         {
             currentPageIndex--;
+            // No need to reload videos from API, just update the current page
             UpdateCurrentPageVideos();
         }
     }
