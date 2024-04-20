@@ -2,13 +2,33 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 90vh; 
+    flex-direction: column; /* Stack items vertically */
+    min-height: 90vh;
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+    .search-container img {
+        width: 500px; /* Set a fixed width */
+    }
+
+.search-text {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    color: black; /* Set text color */
+    font-size: 18px; /* Set text size */
+    margin-top: 25px;
+    transform: translate(-200%, -50%);
 }
 
 .videos-container {
-    background-color: #f2f2f2;
-    border-radius: 10px; 
-    margin-top: 150px;
+    background-color: rgba(242, 242, 242, 0.8);
+    border-radius: 10px;
     padding: 20px; /* Padding around the videos */
     max-height: 70vh;
     width: 90%;

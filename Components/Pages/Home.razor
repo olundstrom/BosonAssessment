@@ -5,8 +5,16 @@
 <link rel="stylesheet" href="Home.razor.css"> <!-- Link to CSS file -->
 
 <div class="container">
+    <!-- Search bar content -->
+    <div class="search-container">
+        <img src="/images/dogbone2.png" />
+        <div class="search-text">Fetch...</div>
+    </div>
+    <!-- Videos container content -->
     <div class="videos-container">
+        <!-- Header to display search query -->
         <div class="videos-header">Fetching results for "dog"</div>
+        <!-- End of header -->
         <div class="videos-grid">
             <!-- Videos -->
             <div class="video-item">
@@ -119,9 +127,11 @@
             </div>
             <!-- End of video block -->
         </div>
+        <!-- Footer to display buttons -->
         <div class="videos-footer">
             <button class="btn-previous">Previous</button>
             <button class="btn-next">Next</button>
         </div>
+        <!-- End of footer -->
     </div>
 </div>
