@@ -1,0 +1,96 @@
+﻿.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh; 
+}
+
+.videos-container {
+    background-color: #f2f2f2;
+    border-radius: 10px; 
+    margin-top: 150px;
+    padding: 20px; /* Padding around the videos */
+    max-height: 70vh;
+    width: 90%;
+    overflow-y: auto; /* Add vertical scroll if content exceeds the height */
+}
+
+.videos-header {
+    padding-bottom: 20px;
+}
+
+.videos-footer {
+    padding-top: 30px;
+    text-align: right;
+}
+
+.btn-previous,
+.btn-next {
+    padding: 8px 16px;
+    margin-right: 10px;
+    font-size: 16px;
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    .btn-previous:hover,
+    .btn-next:hover {
+        background-color: #949494; /* Darker color on hover */
+    }
+
+.videos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Three columns */
+    gap: 20px; /* Spacing between videos */
+}
+
+.video-item {
+    text-align: center;
+}
+
+    .video-item img {
+        width: 100%; 
+        height: auto; 
+        border-radius: 8px; 
+    }
+
+.channel-details-container {
+    display: flex;
+    align-items: center; 
+}
+
+.channel-logo {
+    margin-top: 10px;
+    width: 50px; 
+    height: 50px; 
+    border-radius: 50%; /* Make it circular */
+    overflow: hidden; /* Ensure the image stays within the circular shape */
+    margin-right: 10px; /* Add some space between logo and text */
+}
+
+    .channel-logo img {
+        width: 100%; 
+        height: auto; 
+    }
+
+.video-details {
+    margin-top: 10px; /* Spacing between thumbnail and details */
+    text-align: left; /* Align text to the left */
+}
+
+    .video-details h2, .video-details p {
+        margin: 0;
+    }
+
+@media (max-width: 768px) {
+    .videos-grid {
+        grid-template-columns: repeat(2, 1fr); /* Two columns for smaller screens */
+    }
+}
+
+@media (max-width: 576px) {
+    .videos-grid {
+        grid-template-columns: 1fr; /* One column for even smaller screens */
+    }
+}
