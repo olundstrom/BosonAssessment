@@ -126,7 +126,7 @@
             videos.Add(new YouTubeVideo
                 {
                     Title = video.snippet.title,
-                    ThumbnailUrl = video.snippet.thumbnails.@default.url,
+                    ThumbnailUrl = video.snippet.thumbnails.@high.url,
                     ChannelTitle = video.snippet.channelTitle,
                     ChannelId = video.snippet.channelId,
                     ChannelLogoUrl = video.snippet.channelLogoUrl
@@ -239,6 +239,7 @@
     public class YouTubeThumbnail
     {
         public YouTubeThumbnailDetails @default { get; set; }
+        public YouTubeThumbnailDetails @high { get; set; }
     }
 
     public class YouTubeThumbnailDetails
