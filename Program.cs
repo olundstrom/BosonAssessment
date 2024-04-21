@@ -1,10 +1,18 @@
 using BosonAssessment.Components;
+using Microsoft.AspNetCore.Components;
+using Google.Apis.YouTube.v3;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddScoped<HttpClient>(s =>
+{
+    var navigationManager = s.GetRequiredService<NavigationManager>();
+    return new HttpClient { BaseAddress = new Uri(navigationManager.BaseUri) };
+});
 
 var app = builder.Build();
 
