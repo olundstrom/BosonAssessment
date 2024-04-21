@@ -7,6 +7,242 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<link rel="stylesheet" href="Home.razor.css"> <!-- Link to CSS file -->
 
-Welcome to your new app.
+<div class="container">
+    <!-- Search bar content -->
+    <div class="search-container">
+        <img src="/images/dogbone2.png" />
+        <div class="search-text">Fetch...</div>
+    </div>
+    <!-- Videos container content -->
+    <div class="videos-container">
+        <!-- Header to display search query -->
+        <div class="videos-header">Fetching results for "dog"</div>
+        <!-- End of header -->
+        <div class="videos-grid">
+            <!-- Videos -->
+            @foreach (var video in CurrentPageVideos)
+            {
+                <!-- Display thumbnail, title, and channel name -->
+                <div class="video-item">
+                    <img src="@video.ThumbnailUrl" alt="@video.Title" />
+                    <div class="channel-details-container">
+                        <!-- Display channel logo if available -->
+                        <div class="channel-logo">
+                            @if (!string.IsNullOrEmpty(video.ChannelLogoUrl))
+                            {
+                                <img src="@video.ChannelLogoUrl" alt="@video.ChannelTitle" />
+                            }
+                        </div>
+                        <div class="video-details">
+                            <h2>@video.Title</h2>
+                            <p>@video.ChannelTitle</p>
+                        </div>
+                    </div>
+                </div>
+            }
+            <!-- End of video block -->
+        </div>
+        <!-- Footer to display nav buttons -->
+        <div class="videos-footer">
+            @* <button class="btn-previous">Previous</button>
+            <button class="btn-next">Next</button> *@
+            <button class="btn-previous" disabled="@IsFirstPage" @onclick="LoadPreviousPageAsync">Previous</button>
+            <button class="btn-next" disabled="@IsLastPage" @onclick="LoadNextPageAsync">Next</button>
+        </div>
+        <!-- End of footer -->
+    </div>
+</div>
+
+@code {
+
+    // HTTP client instance for fetching data from the API
+    private readonly HttpClient httpClient = new HttpClient();
+
+    private List<YouTubeVideo> videos = new List<YouTubeVideo>();
+    private List<YouTubeVideo> CurrentPageVideos = new List<YouTubeVideo>();
+    private string nextPageToken;
+    private string prevPageToken;
+    private int maxResultsPerPage = 9; // Maximum number of videos per page
+    private int currentPageIndex = 0;
+    private int TotalResults = 0; // Total number of results
+
+    private bool IsFirstPage => currentPageIndex == 0; // Boolean indicating whether the current page is the first page
+    private bool IsLastPage => string.IsNullOrEmpty(nextPageToken); // Boolean indicating whether the current page is the last page
+
+    // Initialization method called when the component is initialized
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadVideosAsync();
+        UpdateCurrentPageVideos();
+    }
+
+    // Method to fetch videos using the API
+    private async Task LoadVideosAsync(string pageToken = null)
+    {
+        var apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
+        var searchQuery = "dog";
+        var maxResults = 9;
+        var order = "relevance";
+        var url = $"https://www.googleapis.com/youtube/v3/search?key={apiKey}&q={searchQuery}&part=snippet&type=video&maxResults={maxResults}&order={order}";
+
+        if (!string.IsNullOrEmpty(pageToken))
+        {
+            url += $"&pageToken={pageToken}";
+        }
+
+        var response = await httpClient.GetAsync(url);
+        var content = await response.Content.ReadAsStringAsync();
+        var result = JsonSerializer.Deserialize<YouTubeSearchResponse>(content);
+
+        if (result != null && result.items != null)
+        {
+            nextPageToken = result.nextPageToken;
+            prevPageToken = result.prevPageToken;
+            TotalResults = result.pageInfo.totalResults;
+
+            await FetchChannelDetailsAsync(result.items);
+        }
+        else
+        {
+            System.Diagnostics.Debug.WriteLine("No search results found.");
+        }
+    }
+
+    // Method to fetch channel details for each video
+    private async Task FetchChannelDetailsAsync(List<YouTubeVideoItem> items)
+    {
+        var tasks = items.Select(item => FetchChannelDetailsForVideoAsync(item.snippet.channelId));
+        var channelDetailsResults = await Task.WhenAll(tasks);
+
+        foreach (var (video, channelDetailsResult) in items.Zip(channelDetailsResults, (item, details) => (item, details)))
+        {
+            if (channelDetailsResult != null && channelDetailsResult.items != null && channelDetailsResult.items.Any())
+            {
+                video.snippet.channelLogoUrl = channelDetailsResult.items.First().snippet.thumbnails.@default.url;
+            }
+
+            videos.Add(new YouTubeVideo
+                {
+                    Title = video.snippet.title,
+                    ThumbnailUrl = video.snippet.thumbnails.@default.url,
+                    ChannelTitle = video.snippet.channelTitle,
+                    ChannelId = video.snippet.channelId,
+                    ChannelLogoUrl = video.snippet.channelLogoUrl
+                });
+        }
+    }
+
+    // Method to fetch channel details for a single video
+    private async Task<YouTubeChannelResponse> FetchChannelDetailsForVideoAsync(string channelId)
+    {
+        var apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
+        var url = $"https://www.googleapis.com/youtube/v3/channels?key={apiKey}&id={channelId}&part=snippet";
+
+        var response = await httpClient.GetAsync(url);
+        var content = await response.Content.ReadAsStringAsync();
+
+        return JsonSerializer.Deserialize<YouTubeChannelResponse>(content);
+    }
+
+    // Method to update the list of videos for the current page
+    private void UpdateCurrentPageVideos()
+    {
+        CurrentPageVideos = videos.Skip(currentPageIndex * maxResultsPerPage)
+                                  .Take(maxResultsPerPage)
+                                  .ToList();
+    }
+
+    // Method to load the next page of videos
+    private async Task LoadNextPageAsync()
+    {
+        if (!string.IsNullOrEmpty(nextPageToken))
+        {
+            currentPageIndex++;
+            await LoadVideosAsync(nextPageToken);
+            UpdateCurrentPageVideos();
+        }
+    }
+
+    // Method to load the previous page of videos
+    private async Task LoadPreviousPageAsync()
+    {
+        if (!string.IsNullOrEmpty(prevPageToken))
+        {
+            currentPageIndex--;
+            UpdateCurrentPageVideos();
+            await UpdateIsFirstPageAsync();
+        }
+    }
+
+    // Method to update the IsFirstPage property
+    private async Task UpdateIsFirstPageAsync()
+    {
+        await Task.Delay(1);
+        StateHasChanged();
+    }
+
+    /* CLASSES */
+
+    public class YouTubeVideo
+    {
+        public string Title { get; set; }
+        public string ThumbnailUrl { get; set; }
+        public string ChannelTitle { get; set; }
+        public string ChannelId { get; set; }
+        public string ChannelLogoUrl { get; set; }
+    }
+
+    public class YouTubeSearchResponse
+    {
+        public List<YouTubeVideoItem> items { get; set; }
+        public string nextPageToken { get; set; }
+        public string prevPageToken { get; set; }
+        public YouTubePageInfo pageInfo { get; set; }
+    }
+
+    public class YouTubeChannelResponse
+    {
+        public List<YouTubeChannelItem> items { get; set; }
+    }
+
+    public class YouTubeChannelItem
+    {
+        public YouTubeChannelSnippet snippet { get; set; }
+    }
+
+    public class YouTubeChannelSnippet
+    {
+        public YouTubeThumbnail thumbnails { get; set; }
+    }
+
+    public class YouTubePageInfo
+    {
+        public int totalResults { get; set; }
+    }
+
+    public class YouTubeVideoItem
+    {
+        public YouTubeVideoSnippet snippet { get; set; }
+    }
+
+    public class YouTubeVideoSnippet
+    {
+        public string title { get; set; }
+        public string channelTitle { get; set; }
+        public string channelId { get; set; }
+        public string channelLogoUrl { get; set; }
+        public YouTubeThumbnail thumbnails { get; set; }
+    }
+
+    public class YouTubeThumbnail
+    {
+        public YouTubeThumbnailDetails @default { get; set; }
+    }
+
+    public class YouTubeThumbnailDetails
+    {
+        public string url { get; set; }
+    }
+}
