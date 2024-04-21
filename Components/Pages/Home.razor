@@ -13,7 +13,9 @@
     <!-- Search bar content -->
     <div class="search-container">
         <img src="/images/dogbone2.png" />
-        <div class="search-text">Fetch...</div>
+        @* <div class="search-text">Fetch...</div> *@
+        <input class="search-text" type="text" placeholder="Fetch..." @bind-value="searchQuery" @bind-value:event="oninput" />
+        <button @onclick="() => UpdateQuery(searchQuery)">Search</button>
     </div>
     <!-- Videos container content -->
     <div class="videos-container">
@@ -64,6 +66,7 @@
     private List<YouTubeVideo> CurrentPageVideos = new List<YouTubeVideo>();
     private string nextPageToken;
     private string prevPageToken;
+    private string searchQuery = null; // Default search query
     private int maxResultsPerPage = 9; // Maximum number of videos per page
     private int currentPageIndex = 0;
     private int TotalResults = 0; // Total number of results
@@ -81,11 +84,11 @@
     // Method to fetch videos using the API
     private async Task LoadVideosAsync(string pageToken = null)
     {
-        var apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
-        var searchQuery = "dog";
+        var apiKey = "AIzaSyAAXu6CJwvARUkyg9ieuo9kmjxFUL4Mzxw";
         var maxResults = 9;
         var order = "relevance";
-        var url = $"https://www.googleapis.com/youtube/v3/search?key={apiKey}&q={searchQuery}&part=snippet&type=video&maxResults={maxResults}&order={order}";
+        string query = string.IsNullOrEmpty(searchQuery) ? "dog" : $"dog+{searchQuery}";
+        var url = $"https://www.googleapis.com/youtube/v3/search?key={apiKey}&q={query}&part=snippet&type=video&maxResults={maxResults}&order={order}";
 
         if (!string.IsNullOrEmpty(pageToken))
         {
@@ -181,6 +184,13 @@
     {
         await Task.Delay(1);
         StateHasChanged();
+    }
+
+    // Method to handle updated search query
+    private async Task UpdateQuery(string query)
+    {
+        searchQuery = query;
+        await LoadVideosAsync();
     }
 
     /* CLASSES */
