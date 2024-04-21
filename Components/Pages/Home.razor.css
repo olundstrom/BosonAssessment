@@ -109,6 +109,11 @@
     .video-details h2 {
         font-size: 16px;
         font-weight: bold;
+        display: -webkit-box; /* Set as a flexible box */
+        -webkit-line-clamp: 2; /* Limit the number of lines to 2 */
+        -webkit-box-orient: vertical;
+        overflow: hidden; /* Hide any overflowing text */
+        text-overflow: ellipsis; /* Add ellipsis (...) for overflowing text */
     }
 
 @media (max-width: 768px) {
