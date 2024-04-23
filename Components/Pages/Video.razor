@@ -11,14 +11,29 @@
 
 <link rel="stylesheet" href="Video.razor.css"> <!-- Link to CSS file -->
 
-<h1>@VideoTitle</h1>
-
-<div class="video-container">
-    <!-- Embed YouTube video using iframe -->
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/@VideoId" frameborder="0" allowfullscreen></iframe>
+<div class="container">
+    <div class="video-container">
+        <div class="video-contents">
+            <div class="youtube-video">
+                <!-- Embed YouTube video using iframe -->
+                <iframe width="960" height="540" src="https://www.youtube.com/embed/@VideoId" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <div class="video-details-container">
+                <!-- Display channel logo if available -->
+                <div class="channel-logo">
+                    @if (!string.IsNullOrEmpty(@ChannelLogoUrl))
+                    {
+                        <img src="@ChannelLogoUrl" alt="Channel Logo" />
+                    }
+                </div>
+                <div class="video-details">
+                    <h2>Video Title</h2>
+                    <p>Channel Name</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<p>Channel: @ChannelName</p>
 
 @code {
     [Parameter]
@@ -29,4 +44,7 @@
 
     [Parameter]
     public string ChannelName { get; set; }
+
+    [Parameter]
+    public string ChannelLogoUrl { get; set; }
 }
