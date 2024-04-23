@@ -32,7 +32,10 @@
                 <!-- Display thumbnail, title, and channel name -->
                 <div class="video-item">
                     <a @onclick="(() => RedirectToVideoComponent(video.VideoId))">
-                        <img src="@video.ThumbnailUrl" alt="@video.Title" />
+                        <div class="thumbnail-container">
+                            <img src="@video.ThumbnailUrl" alt="@video.Title" class="thumbnail-img" />
+                            <div class="overlay"></div>
+                        </div>
                     </a>
                     <div class="channel-details-container">
                         <!-- Display channel logo if available -->
@@ -111,9 +114,6 @@
         var response = await httpClient.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();
 
-        // Log raw content of HTTP response
-        System.Diagnostics.Debug.WriteLine($"Response Content: {content}");
-
         var result = JsonSerializer.Deserialize<YouTubeSearchResponse>(content);
 
         if (result != null && result.items != null)
@@ -138,8 +138,6 @@
 
         foreach (var (video, channelDetailsResult) in items.Zip(channelDetailsResults, (item, details) => (item, details)))
         {
-            // Debugging output
-            System.Diagnostics.Debug.WriteLine($"Video ID: {video.id.videoId}");
 
             if (channelDetailsResult != null && channelDetailsResult.items != null && channelDetailsResult.items.Any())
             {
