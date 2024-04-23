@@ -20,7 +20,10 @@
     <!-- Videos container content -->
     <div class="videos-container">
         <!-- Header to display search query -->
-        <div class="videos-header">Fetching results for "@(string.IsNullOrEmpty(searchQuery) ? "dog" : $"{searchQuery}")"</div>
+        @if (!string.IsNullOrEmpty(newQuery))
+        {
+            <div class="videos-header">Fetching results for "@newQuery"</div>
+        }
         <!-- End of header -->
         <div class="videos-grid">
             <!-- Videos -->
@@ -64,11 +67,13 @@
     private List<YouTubeVideo> CurrentPageVideos = new List<YouTubeVideo>();
     private string nextPageToken;
     private string prevPageToken;
+    private string newQuery = null;
     private string searchQuery = null; // Default search query
     private int maxResultsPerPage = 9; // Maximum number of videos per page
     private int currentPageIndex = 0;
     private int TotalResults = 0; // Total number of results
 
+    private bool showHeader = false; // For showing the user their seach query
     private bool IsFirstPage => currentPageIndex == 0; // Boolean indicating whether the current page is the first page
     private bool IsLastPage => string.IsNullOrEmpty(nextPageToken); // Boolean indicating whether the current page is the last page
 
@@ -82,10 +87,11 @@
     // Method to fetch videos using the API
     private async Task LoadVideosAsync(bool searchQueryChanged, string pageToken = null)
     {
-        
+
         // Clear videos if search query has been updated
         if (searchQueryChanged)
         {
+            newQuery = searchQuery;
             videos.Clear();
         }
 
