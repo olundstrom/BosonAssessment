@@ -7,6 +7,7 @@
 }
 
 .search-container {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,12 +20,19 @@
 
 .search-text {
     position: absolute;
+    width: 300px;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
     color: black; /* Set text color */
     font-size: 18px; /* Set text size */
-    margin-top: 25px;
-    transform: translate(-200%, -50%);
+    border: none;
+    outline: none; /* Remove the default outline */
 }
+
+    .search-text:focus {
+        border-bottom: 1px solid black; /* Add bottom border when focused */
+    }
 
 .videos-container {
     background-color: rgba(242, 242, 242, 0.8);

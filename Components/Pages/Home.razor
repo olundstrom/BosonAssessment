@@ -15,9 +15,7 @@
     <!-- Search bar content -->
     <div class="search-container">
         <img src="/images/dogbone2.png" />
-        @* <div class="search-text">Fetch...</div> *@
-        <input class="search-text" type="text" placeholder="Fetch..." @bind-value="searchQuery" @bind-value:event="oninput" />
-        <button @onclick="() => UpdateQuery(searchQuery)">Search</button>
+        <input class="search-text" type="text" placeholder="Fetch..." @bind-value="searchQuery" @bind-value:event="oninput" @onkeypress="SearchOnEnter" />
     </div>
     <!-- Videos container content -->
     <div class="videos-container">
@@ -191,6 +189,15 @@
     {
         await Task.Delay(1);
         StateHasChanged();
+    }
+
+    // Method to handle "Enter" key press event on the search input
+    private async Task SearchOnEnter(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await UpdateQuery(searchQuery);
+        }
     }
 
     // Method to handle updated search query
