@@ -5,6 +5,8 @@
 @using System.Linq
 @using System.Threading.Tasks
 
+@inject NavigationManager NavigationManager;
+
 <PageTitle>Home</PageTitle>
 
 <link rel="stylesheet" href="Home.razor.css"> <!-- Link to CSS file -->
@@ -20,7 +22,7 @@
     <!-- Videos container content -->
     <div class="videos-container">
         <!-- Header to display search query -->
-        <div class="videos-header">Fetching results for "dog"</div>
+        <div class="videos-header">Fetching results for "@(string.IsNullOrEmpty(searchQuery) ? "dog" : $"{searchQuery}")"</div>
         <!-- End of header -->
         <div class="videos-grid">
             <!-- Videos -->
@@ -48,8 +50,6 @@
         </div>
         <!-- Footer to display nav buttons -->
         <div class="videos-footer">
-            @* <button class="btn-previous">Previous</button>
-            <button class="btn-next">Next</button> *@
             <button class="btn-previous" disabled="@IsFirstPage" @onclick="LoadPreviousPageAsync">Previous</button>
             <button class="btn-next" disabled="@IsLastPage" @onclick="LoadNextPageAsync">Next</button>
         </div>
@@ -77,13 +77,20 @@
     // Initialization method called when the component is initialized
     protected override async Task OnInitializedAsync()
     {
-        await LoadVideosAsync();
+        await LoadVideosAsync(false);
         UpdateCurrentPageVideos();
     }
 
     // Method to fetch videos using the API
-    private async Task LoadVideosAsync(string pageToken = null)
+    private async Task LoadVideosAsync(bool searchQueryChanged, string pageToken = null)
     {
+        
+        // Clear videos if search query has been updated
+        if (searchQueryChanged)
+        {
+            videos.Clear();
+        }
+
         var apiKey = "AIzaSyAAXu6CJwvARUkyg9ieuo9kmjxFUL4Mzxw";
         var maxResults = 9;
         var order = "relevance";
@@ -163,7 +170,7 @@
         if (!string.IsNullOrEmpty(nextPageToken))
         {
             currentPageIndex++;
-            await LoadVideosAsync(nextPageToken);
+            await LoadVideosAsync(false, nextPageToken);
             UpdateCurrentPageVideos();
         }
     }
@@ -190,7 +197,9 @@
     private async Task UpdateQuery(string query)
     {
         searchQuery = query;
-        await LoadVideosAsync();
+        currentPageIndex = 0; // Reset currentPageIndex to 0
+        await LoadVideosAsync(true);
+        UpdateCurrentPageVideos();
     }
 
     /* CLASSES */
