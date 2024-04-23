@@ -31,7 +31,9 @@
             {
                 <!-- Display thumbnail, title, and channel name -->
                 <div class="video-item">
-                    <img src="@video.ThumbnailUrl" alt="@video.Title" />
+                    <a @onclick="(() => RedirectToVideoComponent(video.VideoId))">
+                        <img src="@video.ThumbnailUrl" alt="@video.Title" />
+                    </a>
                     <div class="channel-details-container">
                         <!-- Display channel logo if available -->
                         <div class="channel-logo">
@@ -95,7 +97,7 @@
             videos.Clear();
         }
 
-        var apiKey = "AIzaSyAAXu6CJwvARUkyg9ieuo9kmjxFUL4Mzxw";
+        var apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
         var maxResults = 9;
         var order = "relevance";
         string query = string.IsNullOrEmpty(searchQuery) ? "dog" : $"dog+{searchQuery}";
@@ -108,6 +110,10 @@
 
         var response = await httpClient.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();
+
+        // Log raw content of HTTP response
+        System.Diagnostics.Debug.WriteLine($"Response Content: {content}");
+
         var result = JsonSerializer.Deserialize<YouTubeSearchResponse>(content);
 
         if (result != null && result.items != null)
@@ -132,6 +138,9 @@
 
         foreach (var (video, channelDetailsResult) in items.Zip(channelDetailsResults, (item, details) => (item, details)))
         {
+            // Debugging output
+            System.Diagnostics.Debug.WriteLine($"Video ID: {video.id.videoId}");
+
             if (channelDetailsResult != null && channelDetailsResult.items != null && channelDetailsResult.items.Any())
             {
                 video.snippet.channelLogoUrl = channelDetailsResult.items.First().snippet.thumbnails.@default.url;
@@ -139,6 +148,7 @@
 
             videos.Add(new YouTubeVideo
                 {
+                    VideoId = video.id.videoId,
                     Title = video.snippet.title,
                     ThumbnailUrl = video.snippet.thumbnails.@high.url,
                     ChannelTitle = video.snippet.channelTitle,
@@ -215,10 +225,17 @@
         UpdateCurrentPageVideos();
     }
 
+    // Method to redirect to Video page
+    private void RedirectToVideoComponent(string videoId)
+    {
+        NavigationManager.NavigateTo($"/video/{videoId}");
+    }
+
     /* CLASSES */
 
     public class YouTubeVideo
     {
+        public string VideoId { get; set; }
         public string Title { get; set; }
         public string ThumbnailUrl { get; set; }
         public string ChannelTitle { get; set; }
@@ -256,7 +273,13 @@
 
     public class YouTubeVideoItem
     {
+        public YouTubeVideoId id { get; set; }
         public YouTubeVideoSnippet snippet { get; set; }
+    }
+
+    public class YouTubeVideoId
+    {
+        public string videoId { get; set; }
     }
 
     public class YouTubeVideoSnippet

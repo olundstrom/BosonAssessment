@@ -1,0 +1,32 @@
+﻿@page "/video/{videoId}"
+
+@using System.Net.Http
+@using System.Text.Json
+@using System.Linq
+@using System.Threading.Tasks
+
+@inject NavigationManager NavigationManager;
+
+<PageTitle>Video</PageTitle>
+
+<link rel="stylesheet" href="Video.razor.css"> <!-- Link to CSS file -->
+
+<h1>@VideoTitle</h1>
+
+<div class="video-container">
+    <!-- Embed YouTube video using iframe -->
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/@VideoId" frameborder="0" allowfullscreen></iframe>
+</div>
+
+<p>Channel: @ChannelName</p>
+
+@code {
+    [Parameter]
+    public string VideoId { get; set; }
+
+    [Parameter]
+    public string VideoTitle { get; set; }
+
+    [Parameter]
+    public string ChannelName { get; set; }
+}
