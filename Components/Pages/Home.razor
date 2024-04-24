@@ -104,7 +104,7 @@
         var apiKey = "AIzaSyDEmdGMJCwvPhQ1OTOStdXcYhwhH83-24I";
         var maxResults = 9;
         var order = "relevance";
-        string query = string.IsNullOrEmpty(searchQuery) ? "dog" : $"dog+{searchQuery}";
+        string query = string.IsNullOrEmpty(searchQuery) ? "dog" : $"dog+{searchQuery.Replace(" ", "+")}"; // Replace spaces with '+'
         var url = $"https://www.googleapis.com/youtube/v3/search?key={apiKey}&q={query}&part=snippet&type=video&maxResults={maxResults}&order={order}";
 
         if (!string.IsNullOrEmpty(pageToken))
@@ -218,7 +218,6 @@
     // Method to handle updated search query
     private async Task UpdateQuery(string query)
     {
-        searchQuery = query;
         currentPageIndex = 0; // Reset currentPageIndex to 0
         await LoadVideosAsync(true);
         UpdateCurrentPageVideos();
