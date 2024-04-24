@@ -14,6 +14,15 @@
 
 <div class="container">
     <div class="video-container">
+        <!-- Button to return to home page -->
+        <div class="return-button">
+            <a href="/" class="return-button-link">
+                <div class="button-content">
+                    <span class="button-text">Back</span>
+                    <img src="/images/pawprint.png" alt="Return Button" class="return-button-img">
+                </div>
+            </a>
+        </div>
         <div class="video-contents">
             <div class="youtube-video">
                 <!-- Embed YouTube video using iframe -->
@@ -104,6 +113,12 @@
             System.Diagnostics.Debug.WriteLine("No video details found.");
         }
 
+    }
+
+    // Method to navigate back to the home page
+    private void GoToHomePage()
+    {
+        navigationManager.NavigateTo("/");
     }
 
     public class YouTubeVideoResponse

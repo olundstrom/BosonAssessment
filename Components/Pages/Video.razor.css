@@ -9,17 +9,67 @@
 .video-container {
     background-color: rgba(242, 242, 242, 0.8);
     border-radius: 10px;
-    width: 960px;
+    width: 90%; /* Set width to 90% of the viewport width */
+    max-width: 960px; /* Set maximum width */
     height: auto; /* Allow height to adjust based on content */
-    margin: 20px auto; 
+    margin: 20px auto;
     padding: 50px;
-    position: relative; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
+.return-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+}
+
+.return-button-link {
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    width: 100px;
+    height: 60px;
+    overflow: hidden; 
+    text-decoration: none;
+    color: inherit;
+    font-weight: bold;
+    position: relative;
+}
+
+.button-content {
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+}
+
+.return-button-img {
+    width: 30px; 
+    height: 30px; 
+    object-fit: contain; 
+    margin-right: 5px; 
+}
+
+.button-text {
+    text-align: center; 
+    opacity: 0; /* Initially hide the text */
+    transition: opacity 0.3s;
+    padding-right: 15px;
+}
+
+.return-button-link:hover .button-text {
+    opacity: 1; /* Show text when hovering over the link */
+}
+
+
 .video-contents {
+    padding: 20px;
+    margin-top: 20px;
     width: 100%; 
 }
 
@@ -39,9 +89,10 @@
     }
 
 .video-details-container {
-    display: flex; 
-    align-items: center; 
-    margin-top: 20px;
+    display: flex;
+    width: 95%;
+    align-items: flex-start; /* Align items to the start (left) */
+    margin-top: 10px;
 }
 
 .channel-logo {
