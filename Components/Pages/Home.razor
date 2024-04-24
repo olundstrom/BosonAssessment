@@ -57,8 +57,36 @@
         </div>
         <!-- Footer to display nav buttons -->
         <div class="videos-footer">
-            <button class="btn-previous" disabled="@IsFirstPage" @onclick="LoadPreviousPageAsync">Previous</button>
-            <button class="btn-next" disabled="@IsLastPage" @onclick="LoadNextPageAsync">Next</button>
+            <!-- Previous button -->
+            <button class="page-button" disabled="@IsFirstPage" @onclick="LoadPreviousPageAsync">
+                <span class="button-content">
+                    <span class="previous-button-text">Previous</span>
+                    <!-- If the button is disabled, show the disabled image; otherwise, show the regular image -->
+                    @if (IsFirstPage)
+                    {
+                        <img src="/images/pawprint_disabled.png" alt="Previous" class="previous-button-img" />
+                    }
+                    else
+                    {
+                        <img src="/images/pawprint.png" alt="Previous" class="previous-button-img" />
+                    }
+                </span>
+            </button>
+            <!-- Next button -->
+            <button class="page-button" disabled="@IsLastPage" @onclick="LoadNextPageAsync">
+                <span class="button-content">
+                    <!-- If the button is disabled, show the disabled image; otherwise, show the regular image -->
+                    @if (IsLastPage)
+                    {
+                        <img src="/images/pawprint_disabled.png" alt="Next" class="next-button-img" />
+                    }
+                    else
+                    {
+                        <img src="/images/pawprint.png" alt="Next" class="next-button-img" />
+                    }
+                    <span class="next-button-text">Next</span>
+                </span>
+            </button>
         </div>
         <!-- End of footer -->
     </div>
@@ -101,7 +129,7 @@
             videos.Clear();
         }
 
-        var apiKey = "AIzaSyDEmdGMJCwvPhQ1OTOStdXcYhwhH83-24I";
+        var apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
         var maxResults = 9;
         var order = "relevance";
         string query = string.IsNullOrEmpty(searchQuery) ? "dog" : $"dog+{searchQuery.Replace(" ", "+")}"; // Replace spaces with '+'

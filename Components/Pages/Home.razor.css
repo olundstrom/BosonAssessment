@@ -47,25 +47,76 @@
     padding-bottom: 20px;
 }
 
+/* BUTTONS */
+
 .videos-footer {
+    display: flex;
+    justify-content: flex-end;
     padding-top: 30px;
     text-align: right;
 }
 
-.btn-previous,
-.btn-next {
-    padding: 8px 16px;
-    margin-right: 10px;
-    font-size: 16px;
-    border: 1px solid black;
-    border-radius: 5px;
+.page-button {
+    background: none;
+    border: none;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-    .btn-previous:hover,
-    .btn-next:hover {
-        background-color: #949494; /* Darker color on hover */
+    .page-button .button-content {
+        display: flex;
+        align-items: center;
     }
+
+.previous-button-img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    margin-right: 5px; /* Adjust as needed */
+    transform: rotate(-90deg);
+}
+
+.next-button-img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    margin-right: 5px; /* Adjust as needed */
+    transform: rotate(90deg);
+}
+
+.previous-button-text {
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-weight: bold;
+    padding-right: 8px;
+}
+
+.next-button-text {
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-weight: bold;
+    padding-left: 5px;
+}
+
+.page-button:hover .previous-button-text {
+    opacity: 1;
+}
+
+.page-button:hover .next-button-text {
+    opacity: 1;
+}
+
+.page-button:disabled .next-button-text {
+    opacity: 0;
+}
+
+.page-button:disabled .previous-button-text {
+    opacity: 0;
+}
+
+/* END OF BUTTONS */
 
 .videos-grid {
     display: grid;
