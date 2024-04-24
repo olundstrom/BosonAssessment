@@ -2,83 +2,73 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column; /* Stack items vertically */
+    flex-direction: column;
     min-height: 90vh;
 }
 
 .video-container {
     background-color: rgba(242, 242, 242, 0.8);
     border-radius: 10px;
-    width: 100%; /* Adjust the width as needed */
-    height: 80vh; /* Set initial height to 80% of viewport height */
-    margin: 20px auto; /* Add some margin */
+    width: 960px;
+    height: auto; /* Allow height to adjust based on content */
+    margin: 20px auto; 
     padding: 50px;
-    position: relative; /* Ensure relative positioning for absolute child elements */
+    position: relative; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
 }
 
 .video-contents {
-    width: 960px; /* Width of the iframe */
-    height: auto; /* Let the height adjust based on content */
-    display: flex;
-    flex-direction: column; /* Arrange contents in a vertical column */
-    align-items: center; /* Align content in the center horizontally */
+    width: 100%; 
 }
 
-    .video-contents iframe {
-        position: absolute; /* Position the iframe absolutely within the video-container */
-        top: 50%; /* Position the iframe at the vertical center */
-        left: 50%; /* Position the iframe at the horizontal center */
-        transform: translate(-50%, -50%); /* Center the iframe */
-        max-width: 70%; /* Set the maximum width of the iframe */
-        max-height: 70%; /* Set the maximum height of the iframe */
+.youtube-video {
+    width: 100%; 
+    position: relative; 
+    padding-bottom: 56.25%; /* Aspect ratio (16:9) */
+    overflow: hidden; 
+}
+
+    .youtube-video iframe {
+        position: absolute; 
+        width: 100%; 
+        height: 100%; 
+        top: 0;
+        left: 0; 
     }
 
-.video-details {
-    display: flex;
-    flex-direction: column; /* Change to column direction */
-    margin-top: 10px; /* Add some space between video and details */
+.video-details-container {
+    display: flex; 
+    align-items: center; 
+    margin-top: 20px;
 }
 
 .channel-logo {
     width: 50px;
     height: 50px;
-    min-width: 50px; /* Set maximum width */
-    min-height: 50px; /* Set maximum height */
-    border-radius: 50%; /* Make it circular */
-    overflow: hidden; /* Ensure the image stays within the circular shape */
-    margin-right: 10px; /* Add some space between logo and text */
+    min-width: 50px; 
+    min-height: 50px; 
+    border-radius: 50%; 
+    overflow: hidden; 
+    margin-right: 10px; 
 }
 
     .channel-logo img {
         width: 100%;
         height: 100%;
-        object-fit: cover; /* Fill the container while maintaining aspect ratio */
+        object-fit: cover; 
     }
 
-.video-details-container {
-    position: absolute; /* Position the video details container absolutely */
-    bottom: 0; /* Position it at the bottom of the iframe */
-    left: 0; /* Align it with the left side of the iframe */
-    width: auto; /* Let it be as wide as its content */
-    padding: 20px; /* Add some padding for spacing */
-    box-sizing: border-box; /* Include padding in width calculation */
-}
-
 .video-details {
-    text-align: left; /* Align the text to the left */
-    color: #000; /* Set the text color */
+    flex: 1; /* Allow the details to grow and fill available space */
 }
 
     .video-details h2, .video-details p {
-        margin: 0;
+        margin: 0; /* Remove default margins */
     }
 
     .video-details h2 {
         font-size: 16px;
         font-weight: bold;
-        display: -webkit-box; /* Set as a flexible box */
-        -webkit-line-clamp: 2; /* Limit the number of lines to 2 */
-        -webkit-box-orient: vertical;
-        overflow: hidden; /* Hide any overflowing text */
-        text-overflow: ellipsis; /* Add ellipsis (...) for overflowing text */
     }
