@@ -5,9 +5,11 @@
 @using System.Linq
 @using System.Threading.Tasks
 @using BosonAssessment.Components.Models
+@using Blazored.SessionStorage
 
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
 
 <PageTitle>Video</PageTitle>
 
@@ -65,7 +67,7 @@
     private async Task GetVideoDetails(string videoId)
     {
         // Construct the API request URL
-        string apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
+        string apiKey = "AIzaSyAAXu6CJwvARUkyg9ieuo9kmjxFUL4Mzxw";
         string videoUrl = $"https://www.googleapis.com/youtube/v3/videos?key={apiKey}&id={videoId}&part=snippet";
 
         // Make the API request
@@ -117,9 +119,15 @@
     }
 
     // Method to navigate back to the home page
-    private void GoToHomePage()
+    private async Task GoToHomePage()
     {
-        navigationManager.NavigateTo("/");
+        // Retrieve search query and current page index from session storage
+        var searchQuery = await sessionStorage.GetItemAsync<string>("searchQuery");
+
+        // Construct URL with search query and page index
+        var returnUrl = $"/?searchQuery={searchQuery}";
+
+        navigationManager.NavigateTo(returnUrl);
     }
 
 }

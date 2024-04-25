@@ -1,8 +1,12 @@
 using BosonAssessment.Components;
 using Microsoft.AspNetCore.Components;
 using Google.Apis.YouTube.v3;
+using System.Net.NetworkInformation;
+using Blazored.SessionStorage;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddBlazoredSessionStorage();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

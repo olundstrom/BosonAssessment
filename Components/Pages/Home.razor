@@ -5,8 +5,11 @@
 @using System.Linq
 @using System.Threading.Tasks
 @using BosonAssessment.Components.Models
+@using Blazored.SessionStorage
 
 @inject NavigationManager NavigationManager;
+@inject IJSRuntime JSRuntime
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
 
 <PageTitle>Home</PageTitle>
 
@@ -107,15 +110,29 @@
     private int currentPageIndex = 0;
     private int TotalResults = 0; // Total number of results
 
+    private bool isLoaded = false;
     private bool showHeader = false; // For showing the user their seach query
     private bool IsFirstPage => currentPageIndex == 0; // Boolean indicating whether the current page is the first page
     private bool IsLastPage => string.IsNullOrEmpty(nextPageToken); // Boolean indicating whether the current page is the last page
 
     // Initialization method called when the component is initialized
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await LoadVideosAsync(false);
-        UpdateCurrentPageVideos();
+        if (firstRender)
+        {
+            // Retrieve search query and current page index using JavaScript interop
+            var storedSearchQuery = await JSRuntime.InvokeAsync<string>("sessionStorage.getItem", "searchQuery");
+            searchQuery = storedSearchQuery?.Trim('"'); // Remove leading and trailing quotes
+
+            // Debug message
+            System.Diagnostics.Debug.WriteLine($"Search Query: {searchQuery}");
+
+            // Load videos after retrieving session storage values
+            await LoadVideosAsync(false);
+            UpdateCurrentPageVideos();
+
+            StateHasChanged();
+        }
     }
 
     // Method to fetch videos using the API
@@ -129,8 +146,8 @@
             videos.Clear();
         }
 
-        var apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
-        var maxResults = 9;
+        var apiKey = "AIzaSyAAXu6CJwvARUkyg9ieuo9kmjxFUL4Mzxw";
+        var maxResults = 100000;
         var order = "relevance";
         string query = string.IsNullOrEmpty(searchQuery) ? "dog" : $"dog+{searchQuery.Replace(" ", "+")}"; // Replace spaces with '+'
         var url = $"https://www.googleapis.com/youtube/v3/search?key={apiKey}&q={query}&part=snippet&type=video&maxResults={maxResults}&order={order}";
@@ -247,6 +264,10 @@
     private async Task UpdateQuery(string query)
     {
         currentPageIndex = 0; // Reset currentPageIndex to 0
+
+        // Save search query and current page index to session storage
+        await sessionStorage.SetItemAsync("searchQuery", query);
+
         await LoadVideosAsync(true);
         UpdateCurrentPageVideos();
     }

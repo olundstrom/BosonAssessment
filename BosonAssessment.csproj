@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Blazored.SessionStorage" Version="2.4.0" />
     <PackageReference Include="Google.Apis.YouTube.v3" Version="1.67.0.3391" />
   </ItemGroup>
 

@@ -1,8 +1,5 @@
 .page {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    background-image: url('images/dogs3.png');
+    background-image: url('/images/dogpark_background.png');
     background-size: cover;
     background-repeat: no-repeat;
 }
