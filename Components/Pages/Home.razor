@@ -106,7 +106,7 @@
     private string prevPageToken;
     private string newQuery = null;
     private string searchQuery = null; // Default search query
-    private int maxResultsPerPage = 9; // Maximum number of videos per page
+    private int maxResultsPerPage = 12; // Maximum number of videos per page
     private int currentPageIndex = 0;
     private int TotalResults = 0; // Total number of results
 
@@ -146,7 +146,7 @@
             videos.Clear();
         }
 
-        var apiKey = "AIzaSyAAXu6CJwvARUkyg9ieuo9kmjxFUL4Mzxw";
+        var apiKey = "AIzaSyDEmdGMJCwvPhQ1OTOStdXcYhwhH83-24I";
         var maxResults = 100000;
         var order = "relevance";
         string query = string.IsNullOrEmpty(searchQuery) ? "dog" : $"dog+{searchQuery.Replace(" ", "+")}"; // Replace spaces with '+'

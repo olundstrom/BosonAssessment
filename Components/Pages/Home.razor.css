@@ -3,7 +3,8 @@
     justify-content: center;
     align-items: center;
     flex-direction: column; /* Stack items vertically */
-    min-height: 90vh;
+    min-height: 100vh;
+    font-family: Arial;
 }
 
 .search-container {
@@ -39,7 +40,7 @@
     border-radius: 10px;
     padding: 20px; /* Padding around the videos */
     max-height: 70vh;
-    width: 90%;
+    width: 100%;
     overflow-y: auto; /* Add vertical scroll if content exceeds the height */
 }
 
@@ -120,12 +121,13 @@
 
 .videos-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Three columns */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Columns */
     gap: 20px; /* Spacing between videos */
 }
 
 .video-item {
     text-align: center;
+    width: 100%;
 }
 
 .thumbnail-container {
@@ -135,8 +137,8 @@
 
 .thumbnail-img {
     display: block;
-    width: 100%; /* Adjust as needed */
-    height: auto; /* Adjust as needed */
+    width: 100%;
+    height: auto;
     border-radius: 8px;
     transition: transform 0.3s ease;
 }
@@ -201,6 +203,7 @@
         -webkit-line-clamp: 2; /* Limit the number of lines to 2 */
         -webkit-box-orient: vertical;
         overflow: hidden; /* Hide any overflowing text */
+        word-wrap: break-word; /* Allow words to break when necessary */
         text-overflow: ellipsis; /* Add ellipsis (...) for overflowing text */
     }
 

@@ -19,6 +19,8 @@ main {
     height: 3.5rem;
     display: flex;
     align-items: center;
+    font-family: Cooper;
+    font-size: 20px;
 }
 
     .top-row ::deep a, .top-row ::deep .btn-link {
