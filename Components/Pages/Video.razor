@@ -49,12 +49,19 @@
 @code {
 
     [Parameter]
-    public string? VideoId { get; set; }
+    public string VideoId { get; set; }
+    public string videoTitle { get; set; }
+    public string channelTitle { get; set; }
+    public string channelLogoUrl { get; set; }
 
-    // Properties to store video details
-    public string? videoTitle { get; set; }
-    public string? channelTitle { get; set; }
-    public string? channelLogoUrl { get; set; }
+    // Constructor
+    public Video()
+    {
+        VideoId = "";
+        videoTitle = "";
+        channelTitle = "";
+        channelLogoUrl = "";
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -81,7 +88,7 @@
         {
             // Retrieve video details from the first item
             var video = videoResult.items[0].snippet;
-            videoTitle = video.title;
+            videoTitle = video.title;       
             channelTitle = video.channelTitle;
 
             // Retrieve channel ID from the first item

@@ -207,7 +207,13 @@
         var response = await httpClient.GetAsync(url);
         var content = await response.Content.ReadAsStringAsync();
 
-        return JsonSerializer.Deserialize<YouTubeChannelResponse>(content);
+        var deserialized = JsonSerializer.Deserialize<YouTubeChannelResponse>(content);
+        YouTubeChannelResponse defaultResponse = new YouTubeChannelResponse();
+
+        // CHECK
+        if (deserialized != null) return deserialized;
+        else return defaultResponse;
+
     }
 
     // Method to update the list of videos for the current page
