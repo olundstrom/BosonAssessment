@@ -7,41 +7,6 @@
     font-family: Arial;
 }
 
-.search-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-.dogbone-image {
-    width: 600px;
-    height: 150px;
-    background-image: url('images/dogbone_large.png');
-    background-size: cover;
-}
-
-    /*.search-container img {
-        width: 500px;*/ /* Set a fixed width */
-    /*}*/
-
-.search-text {
-    position: absolute;
-    width: 350px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: black; /* Set text color */
-    font-size: 18px; /* Set text size */
-    border: none;
-    outline: none; /* Remove the default outline */
-}
-
-    .search-text:focus {
-        border-bottom: 1px solid black; /* Add bottom border when focused */
-    }
-
 .videos-container {
     background-color: rgba(242, 242, 242, 0.8);
     border-radius: 10px;
@@ -217,16 +182,6 @@
 @media (max-width: 768px) {
     .videos-grid {
         grid-template-columns: repeat(2, 1fr); /* Two columns for smaller screens */
-    }
-
-    .dogbone-image {
-        background-image: url('images/dogbone_small.png'); /* Smaller search bar for smaller screens */
-        width: 400px;
-        height: 210px;
-    }
-
-    .search-text {
-        width: 200px;
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 
 @using System.Net.Http
 @using System.Text.Json
@@ -16,10 +17,7 @@
 
 <div class="container">
     <!-- Search bar content -->
-    <div class="search-container">
-        <div class="dogbone-image"></div>
-        <input class="search-text" type="text" placeholder="Fetch..." @bind-value="searchQuery" @bind-value:event="oninput" @onkeypress="SearchOnEnter" />
-    </div>
+    <Search OnSearch="UpdateQuery" />
     <!-- Videos container content -->
     <div class="videos-container">
         <!-- Header to display search query -->
@@ -272,6 +270,7 @@
 
         // Save search query and current page index to session storage
         await sessionStorage.SetItemAsync("searchQuery", query);
+        searchQuery = query;
 
         await LoadVideosAsync(true);
         UpdateCurrentPageVideos();

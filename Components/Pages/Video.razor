@@ -1,4 +1,5 @@
 ﻿@page "/video/{videoId}"
+@rendermode InteractiveServer
 
 @using System.Net.Http
 @using System.Text.Json
@@ -15,6 +16,8 @@
 <PageTitle>Video</PageTitle>
 
 <div class="container">
+    <!-- Search bar content -->
+    <Search OnSearch="HandleSearch" />
     <div class="video-container">
         <!-- Button to return to home page -->
         <div class="return-button">
@@ -124,6 +127,15 @@
             System.Diagnostics.Debug.WriteLine("No video details found.");
         }
 
+    }
+
+    private void HandleSearch(string query)
+    {
+        // Construct the URL with the new search query
+        var returnUrl = $"/?searchQuery={query}";
+
+        // Navigate to the home page with the new search query
+        navigationManager.NavigateTo(returnUrl);
     }
 
     // Method to navigate back to the home page
