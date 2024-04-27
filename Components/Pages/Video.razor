@@ -39,8 +39,8 @@
                 }
             </div>
             <div class="video-details">
-                <h2>@videoTitle</h2>
-                <p>@channelTitle</p>
+                <h2>@System.Net.WebUtility.HtmlDecode(videoTitle)</h2>
+                <p>@System.Net.WebUtility.HtmlDecode(channelTitle)</p>
             </div>
         </div>
     </div>
@@ -72,7 +72,7 @@
     private async Task GetVideoDetails(string videoId)
     {
         // Construct the API request URL
-        string apiKey = "AIzaSyAAXu6CJwvARUkyg9ieuo9kmjxFUL4Mzxw";
+        string apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
         string videoUrl = $"https://www.googleapis.com/youtube/v3/videos?key={apiKey}&id={videoId}&part=snippet";
 
         // Make the API request

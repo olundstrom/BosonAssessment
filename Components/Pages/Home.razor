@@ -48,8 +48,8 @@
                             }
                         </div>
                         <div class="video-details">
-                            <h2>@video.Title</h2>
-                            <p>@video.ChannelTitle</p>
+                            <h2>@System.Net.WebUtility.HtmlDecode(video.Title)</h2>
+                            <p>@System.Net.WebUtility.HtmlDecode(video.ChannelTitle)</p>
                         </div>
                     </div>
                 </div>
@@ -142,7 +142,7 @@
             videos.Clear();
         }
 
-        var apiKey = "AIzaSyAAXu6CJwvARUkyg9ieuo9kmjxFUL4Mzxw";
+        var apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
         var maxResults = 100000;
         var order = "relevance";
         string query = string.IsNullOrEmpty(searchQuery) ? "dog" : $"dog+{searchQuery.Replace(" ", "+")}"; // Replace spaces with '+'
