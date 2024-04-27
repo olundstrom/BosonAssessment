@@ -3,15 +3,13 @@
 
 @using System.Net.Http
 @using System.Text.Json
-@using System.Linq
-@using System.Threading.Tasks
 @using BosonAssessment.Components.Models
 @using Blazored.SessionStorage
 
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
-@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
-@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@inject ISessionStorageService sessionStorage
+@inject IConfiguration Configuration
 
 <PageTitle>GoFetch - Video</PageTitle>
 
@@ -28,6 +26,7 @@
                 </div>
             </a>
         </div>
+        <!-- Video content -->
         <div class="video-contents">
             <div class="youtube-video">
                 <!-- Embed YouTube video using iframe -->
@@ -42,11 +41,13 @@
                     <img src="@channelLogoUrl" alt="Channel Logo" />
                 }
             </div>
+            <!-- Display video title and channel title -->
             <div class="video-details">
                 <h2>@System.Net.WebUtility.HtmlDecode(videoTitle)</h2>
                 <p>@System.Net.WebUtility.HtmlDecode(channelTitle)</p>
             </div>
         </div>
+        <!-- End of video content block -->
     </div>
 </div>
 
@@ -69,6 +70,7 @@
         channelLogoUrl = "";
     }
 
+    // Initialization method called when the component is initialized
     protected override async Task OnInitializedAsync()
     {
         // Call YouTube Data API to get video details
@@ -85,9 +87,6 @@
         var videoResponse = await httpClient.GetAsync(videoUrl);
         var videoContent = await videoResponse.Content.ReadAsStringAsync();
         var videoResult = JsonSerializer.Deserialize<YouTubeVideoResponse>(videoContent);
-
-        // Log raw content of HTTP response
-        System.Diagnostics.Debug.WriteLine($"Response Content: {videoContent}");
 
         // Check if the response contains any items
         if (videoResult?.items != null && videoResult.items.Count > 0)
@@ -117,18 +116,11 @@
                 // Retrieve channel logo URL from the first item
                 channelLogoUrl = channelResult.items[0].snippet.thumbnails.@default.url;
             }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("No channel details found.");
-            }
-        }
-        else
-        {
-            System.Diagnostics.Debug.WriteLine("No video details found.");
         }
 
     }
 
+    // Method to update search before returning back to home
     private async Task UpdateQuery(string? query)
     {
 
@@ -139,18 +131,6 @@
         var returnUrl = $"/?searchQuery={query}";
 
         // Navigate to the home page with the new search query
-        navigationManager.NavigateTo(returnUrl);
-    }
-
-    // Method to navigate back to the home page
-    private async Task GoToHomePage()
-    {
-        // Retrieve search query and current page index from session storage
-        var searchQuery = await sessionStorage.GetItemAsync<string>("searchQuery");
-
-        // Construct URL with search query and page index
-        var returnUrl = $"/?searchQuery={searchQuery}";
-
         navigationManager.NavigateTo(returnUrl);
     }
 

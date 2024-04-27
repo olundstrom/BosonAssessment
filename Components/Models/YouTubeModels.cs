@@ -6,6 +6,7 @@ namespace BosonAssessment.Components.Models
 {
     /* CLASSES */
 
+    // Call to store YouTube video content
     public class YouTubeVideo
     {
         public string VideoId { get; set; }
@@ -28,6 +29,7 @@ namespace BosonAssessment.Components.Models
 
     }
 
+    // Class to store search response data
     public class YouTubeSearchResponse
     {
         public List<YouTubeVideoItem> items { get; set; }
@@ -45,6 +47,7 @@ namespace BosonAssessment.Components.Models
         }
     }
 
+    // Class to store video response data
     public class YouTubeVideoResponse
     {
         public List<VideoItem> items { get; set; }
@@ -56,6 +59,7 @@ namespace BosonAssessment.Components.Models
         }
     }
 
+    // Class to store channel response data
     public class YouTubeChannelResponse
     {
         public List<YouTubeChannelItem> items { get; set; }
@@ -68,6 +72,7 @@ namespace BosonAssessment.Components.Models
 
     }
 
+    // Class to store channel items
     public class YouTubeChannelItem
     {
         public YouTubeChannelSnippet snippet { get; set; }
@@ -79,6 +84,7 @@ namespace BosonAssessment.Components.Models
         }
     }
 
+    // Class to store channel snippet
     public class YouTubeChannelSnippet
     {
         public YouTubeThumbnail thumbnails { get; set; }
@@ -90,12 +96,13 @@ namespace BosonAssessment.Components.Models
         }
     }
 
+    // Class to store page info
     public class YouTubePageInfo
     {
         public int totalResults { get; set; }
     }
 
-    // For home component
+    // For home component - class to store video items
     public class YouTubeVideoItem
     {
         public YouTubeVideoId id { get; set; }
@@ -109,7 +116,7 @@ namespace BosonAssessment.Components.Models
         }
     }
 
-    // For video component
+    // For video component - class to store video items
     public class VideoItem
     {
         public string id { get; set; }
@@ -123,6 +130,7 @@ namespace BosonAssessment.Components.Models
         }
     }
 
+    // Class to store video id
     public class YouTubeVideoId
     {
         public string videoId { get; set; }
@@ -134,6 +142,7 @@ namespace BosonAssessment.Components.Models
         }
     }
 
+    // Class to store video snippet
     public class YouTubeVideoSnippet
     {
         public string title { get; set; }
@@ -153,6 +162,7 @@ namespace BosonAssessment.Components.Models
         }
     }
 
+    // Class to store video thumbnail
     public class YouTubeThumbnail
     {
         public YouTubeThumbnailDetails @default { get; set; }
@@ -166,6 +176,7 @@ namespace BosonAssessment.Components.Models
         }
     }
 
+    // Class to store video thumbnail url
     public class YouTubeThumbnailDetails
     {
         public string url { get; set; }

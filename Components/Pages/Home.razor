@@ -3,29 +3,26 @@
 
 @using System.Net.Http
 @using System.Text.Json
-@using System.Linq
-@using System.Threading.Tasks
 @using BosonAssessment.Components.Models
 @using Blazored.SessionStorage
 
 @inject NavigationManager NavigationManager;
 @inject IJSRuntime JSRuntime
-@inject Blazored.SessionStorage.ISessionStorageService sessionStorage
-@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@inject ISessionStorageService sessionStorage
+@inject IConfiguration Configuration
 
 <PageTitle>GoFetch - Home</PageTitle>
 
 <div class="container">
-    <!-- Search bar content -->
+    <!-- Search bar -->
     <Search OnSearch="UpdateQuery" />
-    <!-- Videos container content -->
+    <!-- Videos container -->
     <div class="videos-container">
         <!-- Header to display search query -->
         @if (!string.IsNullOrEmpty(searchQuery))
         {
             <div class="videos-header">Fetching results for "@searchQuery"</div>
         }
-        <!-- End of header -->
         <div class="videos-grid">
             <!-- Videos -->
             @foreach (var video in CurrentPageVideos)
@@ -88,8 +85,9 @@
                 </span>
             </button>
         </div>
-        <!-- End of footer -->
+        <!-- End of footer block -->
     </div>
+    <!-- End of video container block -->
 </div>
 
 @code {
@@ -99,10 +97,12 @@
 
     private List<YouTubeVideo> videos = new List<YouTubeVideo>();
     private List<YouTubeVideo> CurrentPageVideos = new List<YouTubeVideo>();
+
     private string? apiKey;
     private string? nextPageToken;
     private string? prevPageToken;
     private string? searchQuery = null; // Default search query
+
     private int maxResultsPerPage = 12; // Maximum number of videos per page
     private int currentPageIndex = 0;
     private int TotalResults = 0; // Total number of results
@@ -119,13 +119,9 @@
             var storedSearchQuery = await JSRuntime.InvokeAsync<string>("sessionStorage.getItem", "searchQuery");
             searchQuery = storedSearchQuery?.Trim('"'); // Remove leading and trailing quotes
 
-            // Debug message
-            System.Diagnostics.Debug.WriteLine($"Search Query: {searchQuery}");
-
             // Load videos after retrieving session storage values
             await LoadVideosAsync(false);
             UpdateCurrentPageVideos();
-
             StateHasChanged();
         }
     }
@@ -140,7 +136,6 @@
             videos.Clear();
         }
 
-        // var apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
         apiKey = Configuration["API_KEY"];
         var maxResults = 100000;
         var order = "relevance";
@@ -180,11 +175,13 @@
         foreach (var (video, channelDetailsResult) in items.Zip(channelDetailsResults, (item, details) => (item, details)))
         {
 
+            // Get channel logo url
             if (channelDetailsResult != null && channelDetailsResult.items != null && channelDetailsResult.items.Any())
             {
                 video.snippet.channelLogoUrl = channelDetailsResult.items.First().snippet.thumbnails.@default.url;
             }
 
+            // Add each video and its contents to the videos list
             videos.Add(new YouTubeVideo
                 {
                     VideoId = video.id.videoId,
@@ -200,7 +197,6 @@
     // Method to fetch channel details for a single video
     private async Task<YouTubeChannelResponse> FetchChannelDetailsForVideoAsync(string channelId)
     {
-        var apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
         var url = $"https://www.googleapis.com/youtube/v3/channels?key={apiKey}&id={channelId}&part=snippet";
 
         var response = await httpClient.GetAsync(url);
@@ -209,7 +205,6 @@
         var deserialized = JsonSerializer.Deserialize<YouTubeChannelResponse>(content);
         YouTubeChannelResponse defaultResponse = new YouTubeChannelResponse();
 
-        // CHECK
         if (deserialized != null) return deserialized;
         else return defaultResponse;
 
@@ -226,9 +221,12 @@
     // Method to load the next page of videos
     private async Task LoadNextPageAsync()
     {
+        // Check if there is a next page available
         if (!string.IsNullOrEmpty(nextPageToken))
         {
             currentPageIndex++;
+
+            // Load the videos for the next page and update the current page videos
             await LoadVideosAsync(false, nextPageToken);
             UpdateCurrentPageVideos();
         }
@@ -237,19 +235,16 @@
     // Method to load the previous page of videos
     private async Task LoadPreviousPageAsync()
     {
+        // Check if there is a previous page available
         if (!string.IsNullOrEmpty(prevPageToken))
         {
             currentPageIndex--;
-            UpdateCurrentPageVideos();
-            await UpdateIsFirstPageAsync();
-        }
-    }
 
-    // Method to update the IsFirstPage property
-    private async Task UpdateIsFirstPageAsync()
-    {
-        await Task.Delay(1);
-        StateHasChanged();
+            // Update the current page videos based on the cached data and refresh page
+            UpdateCurrentPageVideos();
+            await Task.Delay(1);
+            StateHasChanged();
+        }
     }
 
     // Method to handle "Enter" key press event on the search input
@@ -257,6 +252,7 @@
     {
         if (e.Key == "Enter")
         {
+            // Call UpdateQuery with new query
             await UpdateQuery(searchQuery);
         }
     }
@@ -264,12 +260,13 @@
     // Method to handle updated search query
     private async Task UpdateQuery(string? query)
     {
-        currentPageIndex = 0; // Reset currentPageIndex to 0
+        currentPageIndex = 0; // Reset currentPageIndex
 
         // Save search query and current page index to session storage
         await sessionStorage.SetItemAsync("searchQuery", query);
         searchQuery = query;
 
+        // Reload page with new query
         await LoadVideosAsync(true);
         UpdateCurrentPageVideos();
     }
