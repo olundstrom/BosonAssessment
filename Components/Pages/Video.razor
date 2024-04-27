@@ -13,8 +13,6 @@
 
 <PageTitle>Video</PageTitle>
 
-<link rel="stylesheet" href="Video.razor.css"> <!-- Link to CSS file -->
-
 <div class="container">
     <div class="video-container">
         <!-- Button to return to home page -->
@@ -51,12 +49,12 @@
 @code {
 
     [Parameter]
-    public string VideoId { get; set; }
+    public string? VideoId { get; set; }
 
     // Properties to store video details
-    public string videoTitle { get; set; }
-    public string channelTitle { get; set; }
-    public string channelLogoUrl { get; set; }
+    public string? videoTitle { get; set; }
+    public string? channelTitle { get; set; }
+    public string? channelLogoUrl { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,7 +65,7 @@
     private async Task GetVideoDetails(string videoId)
     {
         // Construct the API request URL
-        string apiKey = "AIzaSyDEmdGMJCwvPhQ1OTOStdXcYhwhH83-24I";
+        string apiKey = "AIzaSyAAXu6CJwvARUkyg9ieuo9kmjxFUL4Mzxw";
         string videoUrl = $"https://www.googleapis.com/youtube/v3/videos?key={apiKey}&id={videoId}&part=snippet";
 
         // Make the API request

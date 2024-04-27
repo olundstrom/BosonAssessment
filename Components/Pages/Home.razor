@@ -13,8 +13,6 @@
 
 <PageTitle>Home</PageTitle>
 
-<link rel="stylesheet" href="Home.razor.css"> <!-- Link to CSS file -->
-
 <div class="container">
     <!-- Search bar content -->
     <div class="search-container">
@@ -102,16 +100,14 @@
 
     private List<YouTubeVideo> videos = new List<YouTubeVideo>();
     private List<YouTubeVideo> CurrentPageVideos = new List<YouTubeVideo>();
-    private string nextPageToken;
-    private string prevPageToken;
-    private string newQuery = null;
-    private string searchQuery = null; // Default search query
+    private string? nextPageToken;
+    private string? prevPageToken;
+    private string? newQuery = null;
+    private string? searchQuery = null; // Default search query
     private int maxResultsPerPage = 12; // Maximum number of videos per page
     private int currentPageIndex = 0;
     private int TotalResults = 0; // Total number of results
 
-    private bool isLoaded = false;
-    private bool showHeader = false; // For showing the user their seach query
     private bool IsFirstPage => currentPageIndex == 0; // Boolean indicating whether the current page is the first page
     private bool IsLastPage => string.IsNullOrEmpty(nextPageToken); // Boolean indicating whether the current page is the last page
 
@@ -136,7 +132,7 @@
     }
 
     // Method to fetch videos using the API
-    private async Task LoadVideosAsync(bool searchQueryChanged, string pageToken = null)
+    private async Task LoadVideosAsync(bool searchQueryChanged, string? pageToken = null)
     {
 
         // Clear videos if search query has been updated
@@ -146,7 +142,7 @@
             videos.Clear();
         }
 
-        var apiKey = "AIzaSyDEmdGMJCwvPhQ1OTOStdXcYhwhH83-24I";
+        var apiKey = "AIzaSyAAXu6CJwvARUkyg9ieuo9kmjxFUL4Mzxw";
         var maxResults = 100000;
         var order = "relevance";
         string query = string.IsNullOrEmpty(searchQuery) ? "dog" : $"dog+{searchQuery.Replace(" ", "+")}"; // Replace spaces with '+'
@@ -261,7 +257,7 @@
     }
 
     // Method to handle updated search query
-    private async Task UpdateQuery(string query)
+    private async Task UpdateQuery(string? query)
     {
         currentPageIndex = 0; // Reset currentPageIndex to 0
 

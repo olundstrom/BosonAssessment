@@ -157,7 +157,7 @@
     width: 100%;
     height: 100%;
     border-radius: 8px;
-    background: url('images/pawprint_background.png') center/cover;
+    background: url('images/pawprint_background.png');
     opacity: 0;
     transition: opacity 0.3s ease;
     pointer-events: none; /* Allows mouse events to go through the overlay */
@@ -218,14 +218,17 @@
     .videos-grid {
         grid-template-columns: repeat(2, 1fr); /* Two columns for smaller screens */
     }
+
     .dogbone-image {
         background-image: url('images/dogbone_small.png'); /* Smaller search bar for smaller screens */
         width: 400px;
         height: 210px;
     }
+
     .search-text {
         width: 200px;
     }
+}
 
 @media (max-width: 576px) {
     .videos-grid {
