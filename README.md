@@ -1,10 +1,10 @@
 # BosonAssessment - GoFetch
 
-GoFetch is a single-page frontend application developed using Blazor, allowing users to search and browse dog-related YouTube videos. It leverages YouTube's Data API to fetch video details and display them in an intuitive and user-friendly interface.
+GoFetch is a frontend application developed using Blazor, allowing users to search and browse dog-related YouTube videos. It leverages YouTube's Data API to fetch video details and display them in an intuitive and user-friendly interface.
 
 ## Features
 
-- Search Functionality: Users can enter a search query in the provided search bar to find dog-related videos. The application defaults to searching for "dog" and appends the user's input to enhance search results.
+- Search Functionality: Users can enter a search query in the provided search bar on both the home and video page to find dog-related videos. The application defaults to searching for "dog" and appends the user's input to enhance search results.
 - Video Listing: GoFetch lists videos matching the user's search query, displaying thumbnails, titles, channel names, and channel logos for each video.
 - Video Playback: Users can click on a video thumbnail to view the video on a separate page. The video page displays the video itself, along with the title and channel details.
 - Navigation: GoFetch allows users to navigate back to the home page from the video page, retaining their original search query.
