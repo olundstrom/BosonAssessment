@@ -10,6 +10,7 @@
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 
 <PageTitle>Video</PageTitle>
 
@@ -48,6 +49,8 @@
 
 @code {
 
+    private string? apiKey;
+
     [Parameter]
     public string VideoId { get; set; }
     public string videoTitle { get; set; }
@@ -66,13 +69,13 @@
     protected override async Task OnInitializedAsync()
     {
         // Call YouTube Data API to get video details
+        apiKey = Configuration["API_KEY"];
         await GetVideoDetails(VideoId);
     }
 
     private async Task GetVideoDetails(string videoId)
     {
         // Construct the API request URL
-        string apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
         string videoUrl = $"https://www.googleapis.com/youtube/v3/videos?key={apiKey}&id={videoId}&part=snippet";
 
         // Make the API request

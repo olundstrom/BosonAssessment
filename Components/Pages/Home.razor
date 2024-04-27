@@ -10,6 +10,7 @@
 @inject NavigationManager NavigationManager;
 @inject IJSRuntime JSRuntime
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 
 <PageTitle>Home</PageTitle>
 
@@ -100,6 +101,7 @@
 
     private List<YouTubeVideo> videos = new List<YouTubeVideo>();
     private List<YouTubeVideo> CurrentPageVideos = new List<YouTubeVideo>();
+    private string? apiKey;
     private string? nextPageToken;
     private string? prevPageToken;
     private string? newQuery = null;
@@ -142,7 +144,8 @@
             videos.Clear();
         }
 
-        var apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
+        // var apiKey = "AIzaSyBdZbxljpt7Yh014oeoXenbOi7-SgiPJQk";
+        apiKey = Configuration["API_KEY"];
         var maxResults = 100000;
         var order = "relevance";
         string query = string.IsNullOrEmpty(searchQuery) ? "dog" : $"dog+{searchQuery.Replace(" ", "+")}"; // Replace spaces with '+'
