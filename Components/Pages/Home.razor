@@ -17,7 +17,7 @@
     <!-- Search bar -->
     <Search OnSearch="UpdateQuery" />
     <!-- Videos container -->
-    <div class="videos-container">
+    <div class="videos-container" @ref="videosContainer">
         <!-- Header to display search query -->
         @if (!string.IsNullOrEmpty(searchQuery))
         {
@@ -97,6 +97,8 @@
 
     private List<YouTubeVideo> videos = new List<YouTubeVideo>();
     private List<YouTubeVideo> CurrentPageVideos = new List<YouTubeVideo>();
+
+    private ElementReference videosContainer;
 
     private string? apiKey;
     private string? nextPageToken;
@@ -229,6 +231,9 @@
             // Load the videos for the next page and update the current page videos
             await LoadVideosAsync(false, nextPageToken);
             UpdateCurrentPageVideos();
+
+            // Scroll to the top of the videos container
+            await ScrollToTopOfVideosContainerAsync();
         }
     }
 
@@ -244,6 +249,9 @@
             UpdateCurrentPageVideos();
             await Task.Delay(1);
             StateHasChanged();
+
+            // Scroll to the top of the videos container
+            await ScrollToTopOfVideosContainerAsync();
         }
     }
 
@@ -277,4 +285,17 @@
         NavigationManager.NavigateTo($"/video/{videoId}");
     }
 
+    // Method to scroll to the top of the video container
+    private async Task ScrollToTopOfVideosContainerAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToElement", videosContainer);
+    }
+
 }
+
+<!-- Method to scroll to the top of the video container upon page change -->
+<script>
+    window.scrollToElement = function (element) {
+        element.scrollTop = 0;
+    }
+</script>
