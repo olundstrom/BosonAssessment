@@ -13,11 +13,11 @@
 @inject Blazored.SessionStorage.ISessionStorageService sessionStorage
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 
-<PageTitle>Video</PageTitle>
+<PageTitle>GoFetch - Video</PageTitle>
 
 <div class="container">
     <!-- Search bar content -->
-    <Search OnSearch="HandleSearch" />
+    <Search OnSearch="UpdateQuery" />
     <div class="video-container">
         <!-- Button to return to home page -->
         <div class="return-button">
@@ -129,8 +129,12 @@
 
     }
 
-    private void HandleSearch(string query)
+    private async Task UpdateQuery(string? query)
     {
+
+        // Save search query and current page index to session storage
+        await sessionStorage.SetItemAsync("searchQuery", query);
+
         // Construct the URL with the new search query
         var returnUrl = $"/?searchQuery={query}";
 
