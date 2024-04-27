@@ -21,9 +21,9 @@
     <!-- Videos container content -->
     <div class="videos-container">
         <!-- Header to display search query -->
-        @if (!string.IsNullOrEmpty(newQuery))
+        @if (!string.IsNullOrEmpty(searchQuery))
         {
-            <div class="videos-header">Fetching results for "@newQuery"</div>
+            <div class="videos-header">Fetching results for "@searchQuery"</div>
         }
         <!-- End of header -->
         <div class="videos-grid">
@@ -102,7 +102,6 @@
     private string? apiKey;
     private string? nextPageToken;
     private string? prevPageToken;
-    private string? newQuery = null;
     private string? searchQuery = null; // Default search query
     private int maxResultsPerPage = 12; // Maximum number of videos per page
     private int currentPageIndex = 0;
@@ -138,7 +137,6 @@
         // Clear videos if search query has been updated
         if (searchQueryChanged)
         {
-            newQuery = searchQuery;
             videos.Clear();
         }
 
