@@ -20,4 +20,8 @@
     <PackageReference Include="Google.Apis.YouTube.v3" Version="1.67.0.3391" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Secrets\" />
+  </ItemGroup>
+
 </Project>

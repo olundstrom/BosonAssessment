@@ -6,7 +6,7 @@ using Blazored.SessionStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddJsonFile("secrets.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddJsonFile("Secrets/secrets.json", optional: true, reloadOnChange: true);
 
 // Add Blazored Session Storage service
 builder.Services.AddBlazoredSessionStorage();

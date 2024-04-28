@@ -21,9 +21,11 @@ GoFetch is a frontend application developed using Blazor, allowing users to sear
 To run GoFetch locally, follow these steps:
 
 1. Clone the repository from GitHub to your local machine. You can do this using Git by executing the following command in your terminal or command prompt: git clone https://github.com/olundstrom/BosonAssessment.git
-2. Open the solution in Visual Studio or your preferred code editor. Navigate to the directory where you cloned the repository and open the solution file (BosonAssessment.sln).
-3. Build and run the application. You can do this in Visual Studio by pressing the play button or by pressing Ctrl + F5.
-4. Once the application is running, open your web browser and navigate to the URL displayed by Visual Studio. You can now interact with GoFetch, search for dog-related videos, and enjoy watching them!
+2. Generate your own API key from the YouTube Data API. Documentation: https://developers.google.com/youtube/v3/getting-started
+3. Edit the "secrets.json" file in the "Secrets" folder, filling in the following line with your api key: "API_KEY" : "your_api_key_here"
+4. Open the solution in Visual Studio or your preferred code editor. Navigate to the directory where you cloned the repository and open the solution file (BosonAssessment.sln).
+5. Build and run the application. You can do this in Visual Studio by pressing the play button or by pressing Ctrl + F5.
+6. Once the application is running, open your web browser and navigate to the URL displayed by Visual Studio. You can now interact with GoFetch, search for dog-related videos, and enjoy watching them!
 
 ## Figma Design
 
