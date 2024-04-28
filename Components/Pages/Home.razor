@@ -21,7 +21,12 @@
         <!-- Header to display search query -->
         @if (!string.IsNullOrEmpty(searchQuery))
         {
-            <div class="videos-header">Fetching results for "@searchQuery"</div>
+            <div class="search-header">
+                <div class="videos-header">Fetching results for "@searchQuery"</div>
+                <button class="clear-search-button" @onclick="ClearSearch">
+                    <img src="images/x_icon.png" alt="Clear" class="clear-button-img"/>
+                </button>
+            </div>
         }
         <div class="videos-grid">
             <!-- Videos -->
@@ -275,6 +280,20 @@
         searchQuery = query;
 
         // Reload page with new query
+        await LoadVideosAsync(true);
+        UpdateCurrentPageVideos();
+    }
+
+    // Method to clear the search query
+    private async Task ClearSearch()
+    {
+        // Clear search query
+        searchQuery = null;
+
+        // Save empty search query to session storage
+        await sessionStorage.SetItemAsync("searchQuery", "");
+
+        // Reload page with empty query
         await LoadVideosAsync(true);
         UpdateCurrentPageVideos();
     }

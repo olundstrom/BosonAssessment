@@ -16,9 +16,28 @@
     overflow-y: auto; /* Add vertical scroll if content exceeds the height */
 }
 
-.videos-header {
+.search-header {
+    display: flex;
+    align-items: center; /* Align items vertically */
     padding-bottom: 20px;
 }
+    .search-header .videos-header {
+        display: inline-block;
+    }
+
+    .search-header .clear-search-button {
+        display: inline-block;
+        background: none;
+        color: inherit;
+        border: none;
+        width: 30px;
+        height: 30px;
+    }
+
+        .search-header .clear-search-button .clear-button-img {
+            width: 10px;
+            height: 10px;
+        }
 
 /* BUTTONS */
 
